@@ -1,7 +1,6 @@
 import javax.swing.JOptionPane;
 
 public class Main {
-    private static final String codigoProducto = null;
     private static Inventario inventario = new Inventario();
     private static HistorialFacturas historialFacturas = new HistorialFacturas();
     private static HistorialPedidos historialPedidos = new HistorialPedidos();
@@ -91,53 +90,74 @@ public class Main {
     }
 
     private static void crearPedidoProveedor() {
-        PedidoProveedor pedidoProveedor = new PedidoProveedor();
-        StringBuilder productosBajoStock = new StringBuilder("Productos con bajo stock: \n");
-        for (Producto producto : inventario.getProductos()) {
-            if (producto.getStock() < producto.getStockMinimo()) {
-                productosBajoStock.append(producto.getNombre()).append(" - Stock actual: ").append(producto.getStock()).append("\n");
-                pedidoProveedor.agregarProducto(producto);
-            }
-        }
-        if (productosBajoStock.length() > 0) {
-            JOptionPane.showMessageDialog(null, productosBajoStock.toString(), "Pedido al Proveedor", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "No hay productos con bajo stock.", "Pedido al Proveedor", JOptionPane.INFORMATION_MESSAGE);
-        }
-        while (true) {
-            String nombreProducto = JOptionPane.showInputDialog("Ingrese el nombre del producto para agregar al pedido ( o 'fin' para terminar):");
-            if (nombreProducto.equalsIgnoreCase("fin")) {
-                break;
-            }
-            Producto producto = inventario.buscarProductoPorCodigo(nombreProducto);
-            if (producto != null) {
-                pedidoProveedor.agregarProducto(producto);
-                JOptionPane.showMessageDialog(null, "Producto agregado al pedido.");
-            } else {
-                JOptionPane.showMessageDialog(null, "Producto no encontrado");
-            }
-        }
-    }
+    	Pedido pedido = new Pedido();
 
-    private static void crearFactura() {
-        Pedido pedido = new Pedido();
-        mostrarProductos();
-        String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
-        Cliente cliente = new Cliente(nombreCliente);
         while (true) {
-            String nombreProducto = JOptionPane.showInputDialog("Ingrese el nombre del producto");
-            if (nombreProducto.equalsIgnoreCase("fin")) {
+            String codigo_producto = JOptionPane.showInputDialog("Ingrese el código del producto para reponer (o 'fin' para terminar):");
+            if (codigo_producto.equalsIgnoreCase("fin")) {
                 break;
             }
-            Producto producto = inventario.buscarProductoPorCodigo(codigoProducto);
+
+            Producto producto = inventario.buscarProductoPorCodigo(codigo_producto);
             if (producto != null) {
-                pedido.agregarProducto(producto);
-                JOptionPane.showMessageDialog(null, "Producto agregado.");
+                String cantidad_str = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a pedir:");
+                try {
+                    int cantidad = Integer.parseInt(cantidad_str);
+                    pedido.agregarProducto(producto, cantidad);
+                    JOptionPane.showMessageDialog(null, "Producto agregado al pedido.");
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Cantidad inválida.");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Producto no encontrado.");
             }
         }
-        Factura factura = new Factura(cliente, pedido);
-        factura.imprimirFactura();
+
+        if (!pedido.getProductos().isEmpty()) {
+            historialPedidos.agregarPedido(pedido); 
+            JOptionPane.showMessageDialog(null, "Pedido creado y guardado en el historial.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se agregaron productos al pedido.");
+        }
     }
-}
+
+    private static void crearFactura() {
+    	Pedido pedido = new Pedido();
+        String nombrecliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+        Cliente cliente = new Cliente(nombrecliente);
+
+        while (true) {
+            String codigo_producto = JOptionPane.showInputDialog("Ingrese el código del producto (o 'fin' para terminar):");
+            if (codigo_producto.equalsIgnoreCase("fin")) {
+                break;
+            }
+
+            Producto producto = inventario.buscarProductoPorCodigo(codigo_producto);
+            if (producto != null) {
+                String cantidad_str = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a comprar:");
+                try {
+                    int cantidad = Integer.parseInt(cantidad_str);
+                    if (cantidad <= producto.getStock()) {
+                        producto.reducirStock(cantidad);
+                        pedido.agregarProducto(producto, cantidad);
+                        JOptionPane.showMessageDialog(null, "Producto agregado a la factura.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No hay suficiente stock. Stock actual: " + producto.getStock());
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Cantidad inválida.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Producto no encontrado.");
+            }
+        }
+
+        if (!pedido.getProductos().isEmpty()) {
+            Factura factura = new Factura(cliente, pedido);
+            factura.imprimirFactura();
+            historialFacturas.agregarFactura(factura); 
+        } else {
+            JOptionPane.showMessageDialog(null, "No se agregaron productos a la factura.");
+        }
+    }
+    }
