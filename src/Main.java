@@ -122,21 +122,21 @@ public class Main {
     }
 
     private static void crearFactura() {
-    	Pedido pedido = new Pedido();
-        String nombrecliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
-        Cliente cliente = new Cliente(nombrecliente);
+        Pedido pedido = new Pedido();
+        String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+        Cliente cliente = new Cliente(nombreCliente);
 
         while (true) {
-            String codigo_producto = JOptionPane.showInputDialog("Ingrese el código del producto (o 'fin' para terminar):");
-            if (codigo_producto.equalsIgnoreCase("fin")) {
+            String codigoProducto = JOptionPane.showInputDialog("Ingrese el código del producto (o 'fin' para terminar):");
+            if (codigoProducto.equalsIgnoreCase("fin")) {
                 break;
             }
 
-            Producto producto = inventario.buscarProductoPorCodigo(codigo_producto);
+            Producto producto = inventario.buscarProductoPorCodigo(codigoProducto);
             if (producto != null) {
-                String cantidad_str = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a comprar:");
+                String cantidadStr = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a comprar:");
                 try {
-                    int cantidad = Integer.parseInt(cantidad_str);
+                    int cantidad = Integer.parseInt(cantidadStr);
                     if (cantidad <= producto.getStock()) {
                         producto.reducirStock(cantidad);
                         pedido.agregarProducto(producto, cantidad);
@@ -155,9 +155,10 @@ public class Main {
         if (!pedido.getProductos().isEmpty()) {
             Factura factura = new Factura(cliente, pedido);
             factura.imprimirFactura();
-            historialFacturas.agregarFactura(factura); 
+            historialFacturas.agregarFactura(factura);
         } else {
             JOptionPane.showMessageDialog(null, "No se agregaron productos a la factura.");
         }
     }
+
     }
