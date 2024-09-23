@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
     	cargarProductosPredefinidos();
         while (true) {
-            String[] opciones = {"Agregar productos", "Mostrar productos", "Crear pedido Proveedor", "Crear factura", "Verificar stock", "Mostrar Facturas", "Mostrar Pedidos", "Salir"};
+            String[] opciones = {"Agregar productos", "Mostrar productos", "Crear pedido Proveedor", "Crear factura", "Verificar stock", "Mostrar Facturas", "Mostrar Pedidos", "Aumentar stock","Salir"};
             int opcion = JOptionPane.showOptionDialog(null, "Elija una opcion: ", "Menu Principal", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
             switch (opcion) {
@@ -34,6 +34,10 @@ public class Main {
                     historialPedidos.mostrarPedidos();
                     break;
                 case 7:
+                	aumentarStock();
+                	break;
+                case 8:
+                	
                     JOptionPane.showMessageDialog(null, "Saliendo");
                     return;
                 default:
@@ -159,6 +163,17 @@ public class Main {
         } else {
             JOptionPane.showMessageDialog(null, "No se agregaron productos a la factura.");
         }
+    }
+    private static void aumentarStock() {
+    	String codigo = JOptionPane.showInputDialog("Ingrese el codigo del producto  para aumentar stoock:");
+    	String cantidadStr = JOptionPane.showInputDialog("Ingrese la cantidad a aumentar");
+    	JOptionPane.showMessageDialog(null, "Stock actualizado del producto: " + codigo);
+    	try {
+			int cantidad = Integer.parseInt(cantidadStr);
+			inventario.aumentarStockProducto(codigo, cantidad);
+		} catch ( NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Cantidad invalida");
+		}
     }
 
     }

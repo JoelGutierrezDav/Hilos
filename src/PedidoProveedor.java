@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
-public class PedidoProveedor {
+	class PedidoProveedor {
 	private List<Producto> productosaReponer;
 		
 	public PedidoProveedor() {

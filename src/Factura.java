@@ -3,7 +3,7 @@ import javax.swing.JOptionPane;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-public class Factura {
+ class Factura {
     private Cliente cliente;
     private Pedido pedido;
     private LocalDateTime fechaEmision;

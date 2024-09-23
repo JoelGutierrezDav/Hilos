@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Pedido {
+ class Pedido {
     private Map<Producto, Integer> productos; 
     private String id;
 

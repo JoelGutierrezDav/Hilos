@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-public class HistorialFacturas {
+ class HistorialFacturas {
     private ArrayList<Factura> facturas;
 
     public HistorialFacturas() {

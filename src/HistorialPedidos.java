@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-public class HistorialPedidos {
+ class HistorialPedidos {
     private ArrayList<Pedido> pedidos;
 
     public HistorialPedidos() {

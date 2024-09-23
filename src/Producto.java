@@ -1,5 +1,5 @@
 
-public class Producto {
+class Producto {
 	private String codigo;
 	private String nombre;
 	private String descripcion;
@@ -56,6 +56,9 @@ public class Producto {
 	}
 	public void reducirStock(int cantidad) {
 		this.stock -= cantidad;
+	}
+	public void aumentarStock(int cantidad) {
+		this.stock += cantidad;
 	}
 	public boolean esBajoEnStock() {
 		return stock < STOCK_MINIMO;
