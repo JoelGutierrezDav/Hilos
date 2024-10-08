@@ -58,4 +58,5 @@ class Inventario {
     public List<Producto> getProductos() {
         return new ArrayList<>(this.productos);
     }
+    
 }

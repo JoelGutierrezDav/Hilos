@@ -15,6 +15,7 @@ class Producto {
         this.precio = precio;
         this.stock = stock;
         this.stockMinimo = stockMinimo;
+      
 	}
 	public String getCodigo() {
 		return codigo;
@@ -63,6 +64,7 @@ class Producto {
 	public boolean esBajoEnStock() {
 		return stock < STOCK_MINIMO;
 	}
+	
 	@Override
     public String toString() {
 		return "Código: " + codigo + " | " + nombre + " - $" + precio + " | Stock: " + stock + " | Descripción: " + descripcion;
