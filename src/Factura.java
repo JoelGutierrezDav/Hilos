@@ -13,6 +13,16 @@ import java.util.Map;
         this.pedido = pedido;
         this.fechaEmision = LocalDateTime.now();
     }
+    public Cliente getCliente() {
+        return cliente;
+    }
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public double calcularTotal() {
+        return pedido.calcularTotal();
+    }
 
     public void imprimirFactura() {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yy hh:mm");

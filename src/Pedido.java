@@ -1,15 +1,15 @@
 import java.util.HashMap;
 import java.util.Map;
 
- class Pedido {
-    private Map<Producto, Integer> productos; 
+class Pedido {
+    private Map<Producto, Integer> productos;
     private String id;
 
     public Pedido() {
-    	productos = new HashMap<>();
-    	this.id = generateId();
+        productos = new HashMap<>();
+        this.id = generateId();
     }
-    
+
     public void agregarProducto(Producto producto, int cantidad) {
         if (productos.containsKey(producto)) {
             productos.put(producto, productos.get(producto) + cantidad);
@@ -17,7 +17,7 @@ import java.util.Map;
             productos.put(producto, cantidad);
         }
     }
-    
+
     public Map<Producto, Integer> getProductos() {
         return productos;
     }
@@ -29,12 +29,15 @@ import java.util.Map;
         }
         return total;
     }
+
     public String getId() {
-    	return id;
+        return id;
     }
+
     private String generateId() {
-    	return "PEDIDO-" + System.currentTimeMillis();
+        return "PEDIDO-" + System.currentTimeMillis();
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
