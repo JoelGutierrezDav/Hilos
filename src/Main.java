@@ -5,10 +5,10 @@ public class Main {
     private static HistorialFacturas historialFacturas = new HistorialFacturas();
     private static HistorialPedidos historialPedidos = new HistorialPedidos();
     
-    /*boolean salir = false;*/
     
     public static void main(String[] args) {
-    	cargarProductosPredefinidos();
+    	Conexion.getInstance();
+    	/*cargarProductosPredefinidos();*/
     	
 
         while (true) {
@@ -50,9 +50,10 @@ public class Main {
                     JOptionPane.showMessageDialog(null, "Opción no valida");
             }
         }
-    }
+          
+        }
     
-    private static void cargarProductosPredefinidos() {
+    /*private static void cargarProductosPredefinidos() {
         inventario.agregarProducto(new Producto("P127", "Patita de Recta", "Con Colita", 3500, 20, 5));
         inventario.agregarProducto(new Producto("P351", "Patita de Recta", "Sin Colita", 3500, 5, 5));
         inventario.agregarProducto(new Producto("CR1/32", "Patita Despuntadora", "Derecho", 4500, 4, 5));
@@ -66,7 +67,7 @@ public class Main {
         inventario.agregarProducto(new Producto("LP225", "Groche de Over", "Pesada M.K", 6000, 20, 5));
         inventario.agregarProducto(new Producto("LP226", "Groche de Over", "Liviana M.K", 6000, 20, 5));
         inventario.agregarProducto(new Producto("KL202", "Groche de Over", "M.K Inferior", 6000, 20, 5));
-    }
+    }*/
 
     private static void agregarProductoAlInventario() {
         String codigo = JOptionPane.showInputDialog("Ingresar codigo del Producto");
