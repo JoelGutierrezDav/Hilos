@@ -82,7 +82,9 @@ public class Main {
             int stock = Integer.parseInt(cant);
             int stockMinimo = Integer.parseInt(stockMinimoStr); 
             Producto producto = new Producto(codigo, nombre, descripcion, precio, stock, stockMinimo);
-            inventario.agregarProducto(producto);
+            
+            Producto.crearProducto(producto);
+            
             JOptionPane.showMessageDialog(null, "Producto agregado.");
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Datos de precio, stock o stock mínimo inválidos");

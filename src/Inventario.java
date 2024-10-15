@@ -4,6 +4,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 class Inventario {
+	
     private List<Producto> productos;
 
     public Inventario() {

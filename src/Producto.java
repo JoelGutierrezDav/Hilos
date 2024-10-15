@@ -1,3 +1,9 @@
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import org.mariadb.jdbc.Connection;
 
 class Producto {
 	private String codigo;
@@ -6,10 +12,14 @@ class Producto {
 	private double precio;
 	private int stock;
 	private int stockMinimo;
+	private int id;
+	private static Connection con = (Connection) Conexion.getInstance().getConnection();
 	private static final int STOCK_MINIMO = 5;
 	
-    public Producto(String codigo, String nombre, String descripcion, double precio, int stock, int stockMinimo) {
-        this.codigo = codigo;
+	
+    public Producto(int id, String codigo, String nombre, String descripcion, double precio, int stock, int stockMinimo) {
+        this.id = id;
+    	this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -17,6 +27,22 @@ class Producto {
         this.stockMinimo = stockMinimo;
       
 	}
+    public Producto( String codigo, String nombre, String descripcion, double precio, int stock, int stockMinimo) {
+       
+    	this.codigo = codigo;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+      
+	}
+    public int getId() {
+    	return id;
+    }
+    public void setID(int id) {
+    	this.id = id; 
+    }
 	public String getCodigo() {
 		return codigo;
 	}
@@ -69,4 +95,24 @@ class Producto {
     public String toString() {
 		return "Código: " + codigo + " | " + nombre + " - $" + precio + " | Stock: " + stock + " | Descripción: " + descripcion;
     }
+	
+	public static void crearProducto(Producto producto) {
+		try {
+			PreparedStatement statement = con.prepareStatement("INSERT INTO `producto`(`Codigo`, `Nombre`, `Descripcion`, `Precio`, `Stock`, `Stock_minimo`) VALUES (?,?,?,?,?,?)");
+		statement.setString(1, producto.getCodigo());
+		statement.setString(2, producto.getNombre());
+		statement.setString(3, producto.getDescripcion());
+		statement.setDouble(4, producto.getPrecio());
+		statement.setInt(5, producto.getStock());
+		statement.setInt(6, producto.getStockMinimo());
+		
+		int fila = statement.executeUpdate();
+		if (fila>0) {
+			JOptionPane.showMessageDialog(null, "Se guardo con exito!");
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error!!!");
+			
+		}
+	}
 }
