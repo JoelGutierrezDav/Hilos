@@ -1,5 +1,7 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
@@ -98,7 +100,7 @@ class Producto {
 	
 	public static void crearProducto(Producto producto) {
 		try {
-			PreparedStatement statement = con.prepareStatement("INSERT INTO `producto`(`Codigo`, `Nombre`, `Descripcion`, `Precio`, `Stock`, `Stock_minimo`) VALUES (?,?,?,?,?,?)");
+			PreparedStatement statement =  con.prepareStatement("INSERT INTO `producto`(`Codigo`, `Nombre`, `Descripcion`, `Precio`, `Stock`, `Stock_minimo`) VALUES (?,?,?,?,?,?)");
 		statement.setString(1, producto.getCodigo());
 		statement.setString(2, producto.getNombre());
 		statement.setString(3, producto.getDescripcion());
@@ -114,5 +116,62 @@ class Producto {
 			JOptionPane.showMessageDialog(null, "Error!!!");
 			
 		}
+	}
+	public static LinkedList<Producto> mostrarProducto() {
+		LinkedList<Producto> producto = new LinkedList<Producto>();
+		try {
+			PreparedStatement statement = (PreparedStatement) con.prepareStatement("SELECT * FROM `producto`");
+		ResultSet resultados = statement.executeQuery();
+		while (resultados.next()) {
+			producto.add(new Producto(resultados.getString("Codigo"),
+					resultados.getString("Nombre"), 
+					resultados.getString("Descripcion"), 
+					resultados.getDouble("Precio"),
+					resultados.getInt("Stock"),
+					resultados.getInt("Stock Minimo")));
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error!!!");
+			
+		}
+		return producto;
+	}
+	public static boolean actualizarProducto(int id) {
+		
+		try {
+			PreparedStatement statement = (PreparedStatement) con.prepareStatement("SELECT * FROM `producto`");
+		ResultSet resultados = statement.executeQuery();
+		while (resultados.next()) {
+			producto.add(new Producto(resultados.getString("Codigo"),
+					resultados.getString("Nombre"), 
+					resultados.getString("Descripcion"), 
+					resultados.getDouble("Precio"),
+					resultados.getInt("Stock"),
+					resultados.getInt("Stock Minimo")));
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error!!!");
+			
+		}
+		
+	}
+	public static LinkedList<Producto> eliminarProducto() {
+		LinkedList<Producto> producto = new LinkedList<Producto>();
+		try {
+			PreparedStatement statement = (PreparedStatement) con.prepareStatement("SELECT * FROM `producto`");
+		ResultSet resultados = statement.executeQuery();
+		while (resultados.next()) {
+			producto.add(new Producto(resultados.getString("Codigo"),
+					resultados.getString("Nombre"), 
+					resultados.getString("Descripcion"), 
+					resultados.getDouble("Precio"),
+					resultados.getInt("Stock"),
+					resultados.getInt("Stock Minimo")));
+		}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error!!!");
+			
+		}
+		return producto;
 	}
 }
