@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class Conexion {
-	/*private static final String URL = "jdbc:mysqldb://localhost:3306/hilos";*/
+	
 	private static final String URL = "jdbc:mariadb://localhost:3306/hilos";
 
 	private static final String User = "root";

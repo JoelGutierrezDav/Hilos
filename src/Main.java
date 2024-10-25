@@ -1,225 +1,248 @@
 import javax.swing.JOptionPane;
+import java.util.LinkedList;
 
 public class Main {
-    private static Inventario inventario = new Inventario();
-    private static HistorialFacturas historialFacturas = new HistorialFacturas();
-    private static HistorialPedidos historialPedidos = new HistorialPedidos();
-    
-    
+
     public static void main(String[] args) {
-    	Conexion.getInstance();
-    	/*cargarProductosPredefinidos();*/
-    	
+        boolean salir = false;
 
-        while (true) {
-            String[] opciones = {"Agregar productos", "Mostrar productos", "Crear pedido Proveedor", "Crear factura", "Verificar stock", "Mostrar Facturas", "Mostrar Pedidos", "Mostrar Productos más vendidos","Modificar Datos Productos","Salir"};
-            String opcion = (String)JOptionPane.showInputDialog(null, "Elija una opcion: ", "Menu Principal", JOptionPane.DEFAULT_OPTION, null, opciones, opciones[0]);
+        while (!salir) {
+            String menuPrincipal = JOptionPane.showInputDialog(null,
+                    "Menú Principal\n"
+                    + "1. Gestión de Clientes\n"
+                    + "2. Gestión de Pedidos Proveedor\n"
+                    + "3. Gestión de Facturas\n"
+                    + "4. Gestión de Inventario\n"
+                    + "5. Historial\n"
+                    + "6. Salir");
 
-            switch (opcion) {
-                case "Agregar productos":
-                    agregarProductoAlInventario();
+            switch (menuPrincipal) {
+                case "1":
+                    gestionarClientes();
                     break;
-                case  "Mostrar productos":
-                    mostrarProductos();
+                case "2":
+                    gestionarPedidosProveedor();
                     break;
-                case "Crear pedido Proveedor":
-                    crearPedidoProveedor();
+                case "3":
+                    gestionarFacturas();
                     break;
-                case "Crear factura":
-                    crearFactura();
+                case "4":
+                    gestionarInventario();
                     break;
-                case  "Verificar stock":
-                    inventario.verificarStock();
+                case "5":
+                    mostrarHistorial();
                     break;
-                case "Mostrar Facturas":
-                    historialFacturas.mostrarFacturas(); 
+                case "6":
+                    salir = true;
                     break;
-                case "Mostrar Pedidos":
-                    historialPedidos.mostrarPedidos();
-                    break;
-                case "Mostrar Productos más vendidos":
-                	mostrarProductosMasVendidos();
-                	break;
-                case "Modificar Datos Productos":
-                	modificarDatosProducto();
-                	break;
-                case "Salir":
-                    JOptionPane.showMessageDialog(null, "Saliendo");
-                    return;
                 default:
-                    JOptionPane.showMessageDialog(null, "Opción no valida");
+                    JOptionPane.showMessageDialog(null, "Opción no válida.");
+                    break;
             }
         }
-          
-        }
-    
-    /*private static void cargarProductosPredefinidos() {
-        inventario.agregarProducto(new Producto("P127", "Patita de Recta", "Con Colita", 3500, 20, 5));
-        inventario.agregarProducto(new Producto("P351", "Patita de Recta", "Sin Colita", 3500, 5, 5));
-        inventario.agregarProducto(new Producto("CR1/32", "Patita Despuntadora", "Derecho", 4500, 4, 5));
-        inventario.agregarProducto(new Producto("CR1/16N", "Patita Despuntadora", "Derecho", 4500, 10, 5));
-        inventario.agregarProducto(new Producto("CL1/32", "Patita Despuntadora", "Izquierdo", 4500, 5, 5));
-        inventario.agregarProducto(new Producto("CL1/16N", "Patita Despuntadora", "Izquierdo", 4500, 20, 5));
-        inventario.agregarProducto(new Producto("KL25", "Groche de Over", "Inferior", 5000, 20, 5));
-        inventario.agregarProducto(new Producto("LP26", "Groche de Over", "Superior", 6000, 20, 5));
-        inventario.agregarProducto(new Producto("KL35", "Groche de Over", "Inferior", 5000, 20, 5));
-        inventario.agregarProducto(new Producto("LP38", "Groche de Over", "Pesado Superior", 5000, 20, 5));
-        inventario.agregarProducto(new Producto("LP225", "Groche de Over", "Pesada M.K", 6000, 20, 5));
-        inventario.agregarProducto(new Producto("LP226", "Groche de Over", "Liviana M.K", 6000, 20, 5));
-        inventario.agregarProducto(new Producto("KL202", "Groche de Over", "M.K Inferior", 6000, 20, 5));
-    }*/
-
-    private static void agregarProductoAlInventario() {
-        String codigo = JOptionPane.showInputDialog("Ingresar codigo del Producto");
-        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del producto: ");
-        String descripcion = JOptionPane.showInputDialog("Ingresar descripcion del producto");
-        String precio$ = JOptionPane.showInputDialog("Ingrese el precio del producto");
-        String cant = JOptionPane.showInputDialog("Ingresar cantidad del producto");
-        String stockMinimoStr = JOptionPane.showInputDialog("Ingrese el stock mínimo del producto");
-
-        try {
-            double precio = Double.parseDouble(precio$);
-            int stock = Integer.parseInt(cant);
-            int stockMinimo = Integer.parseInt(stockMinimoStr); 
-            Producto producto = new Producto(codigo, nombre, descripcion, precio, stock, stockMinimo);
-            
-            Producto.crearProducto(producto);
-            
-            JOptionPane.showMessageDialog(null, "Producto agregado.");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Datos de precio, stock o stock mínimo inválidos");
-        }
     }
 
-    private static void mostrarProductos() {
-        StringBuilder listaProductos = new StringBuilder();
-        for (Producto producto : inventario.getProductos()) {
-            listaProductos.append(producto).append("\n");
-        }
-        if (listaProductos.length() == 0) {
-            listaProductos.append("No hay productos en el inventario.");
-        }
-        JOptionPane.showMessageDialog(null, listaProductos.toString(), "Productos en Inventario", JOptionPane.INFORMATION_MESSAGE);
-    }
+    // Método para gestionar clientes
+    private static void gestionarClientes() {
+        String menuClientes = JOptionPane.showInputDialog(null,
+                "Gestión de Clientes\n"
+                + "1. Agregar Cliente\n"
+                + "2. Mostrar Clientes\n"
+                + "3. Buscar Cliente\n"
+                + "4. Eliminar Cliente\n"
+                + "5. Volver");
 
-    private static void crearPedidoProveedor() {
-    	Pedido pedido = new Pedido();
-
-        while (true) {
-            String codigo_producto = JOptionPane.showInputDialog("Ingrese el código del producto para reponer (o 'fin' para terminar):");
-            if (codigo_producto.equalsIgnoreCase("fin")) {
+        switch (menuClientes) {
+            case "1":
+                String nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+                Cliente cliente = new Cliente(nombre);
+                Cliente.crearCliente(cliente);
                 break;
-            }
-
-            Producto producto = inventario.buscarProductoPorCodigo(codigo_producto);
-            if (producto != null) {
-                String cantidad_str = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a pedir:");
-                try {
-                    int cantidad = Integer.parseInt(cantidad_str);
-                    pedido.agregarProducto(producto, cantidad);
-                    JOptionPane.showMessageDialog(null, "Producto agregado al pedido.");
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Cantidad inválida.");
+            case "2":
+                LinkedList<Cliente> clientes = Cliente.mostrarClientes();
+                StringBuilder sbClientes = new StringBuilder("Clientes:\n");
+                for (Cliente c : clientes) {
+                    sbClientes.append(c.toString()).append("\n");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Producto no encontrado.");
-            }
-        }
-
-        if (!pedido.getProductos().isEmpty()) {
-            historialPedidos.agregarPedido(pedido); 
-            JOptionPane.showMessageDialog(null, "Pedido creado y guardado en el historial.");
-        } else {
-            JOptionPane.showMessageDialog(null, "No se agregaron productos al pedido.");
-        }
-    }
-
-    private static void crearFactura() {
-        Pedido pedido = new Pedido();
-        String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
-        Cliente cliente = new Cliente(nombreCliente);
-
-        while (true) {
-            String codigoProducto = JOptionPane.showInputDialog("Ingrese el código del producto (o 'fin' para terminar):");
-            if (codigoProducto.equalsIgnoreCase("fin")) {
+                JOptionPane.showMessageDialog(null, sbClientes.toString());
                 break;
-            }
+            case "3":
+                int idBuscar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del cliente a buscar:"));
+                Cliente buscado = Cliente.buscarCliente(idBuscar);
+                JOptionPane.showMessageDialog(null, buscado != null ? buscado.toString() : "Cliente no encontrado.");
+                break;
+            case "4":
+                int idEliminar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del cliente a eliminar:"));
+                Cliente.eliminarCliente(idEliminar);
+                break;
+            case "5":
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
+        }
+    }
 
-            Producto producto = inventario.buscarProductoPorCodigo(codigoProducto);
-            if (producto != null) {
-                String cantidadStr = JOptionPane.showInputDialog("Ingrese la cantidad de " + producto.getNombre() + " a comprar:");
-                try {
-                    int cantidad = Integer.parseInt(cantidadStr);
-                    if (cantidad <= producto.getStock()) {
-                        producto.reducirStock(cantidad);
-                        pedido.agregarProducto(producto, cantidad);
-                        JOptionPane.showMessageDialog(null, "Producto agregado a la factura.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No hay suficiente stock. Stock actual: " + producto.getStock());
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Cantidad inválida.");
+    // Método para gestionar pedidos de proveedor
+    private static void gestionarPedidosProveedor() {
+        String menuPedidos = JOptionPane.showInputDialog(null,
+                "Gestión de Pedidos a Proveedores\n"
+                + "1. Agregar Pedido\n"
+                + "2. Mostrar Pedidos\n"
+                + "3. Buscar Pedido\n"
+                + "4. Actualizar Pedido\n"
+                + "5. Eliminar Pedido\n"
+                + "6. Volver");
+
+        switch (menuPedidos) {
+            case "1":
+                String descripcion = JOptionPane.showInputDialog("Ingrese la descripción del pedido:");
+                String proveedor = JOptionPane.showInputDialog("Ingrese el nombre del proveedor:");
+                PedidoProveedor pedido = new PedidoProveedor(descripcion, proveedor);
+                PedidoProveedor.crearPedidoProveedor(pedido);
+                break;
+            case "2":
+                LinkedList<PedidoProveedor> pedidos = PedidoProveedor.mostrarPedidoProveedor();
+                StringBuilder sbPedidos = new StringBuilder("Pedidos de Proveedores:\n");
+                for (PedidoProveedor p : pedidos) {
+                    sbPedidos.append(p.toString()).append("\n");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Producto no encontrado.");
-            }
+                JOptionPane.showMessageDialog(null, sbPedidos.toString());
+                break;
+            case "3":
+                int idBuscar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del pedido a buscar:"));
+                PedidoProveedor pedidoBuscado = PedidoProveedor.buscarPedidoProveedor(idBuscar);
+                JOptionPane.showMessageDialog(null, pedidoBuscado != null ? pedidoBuscado.toString() : "Pedido no encontrado.");
+                break;
+            case "4":
+                int idActualizar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del pedido a actualizar:"));
+                String nuevaDescripcion = JOptionPane.showInputDialog("Ingrese la nueva descripción del pedido:");
+                String nuevoProveedor = JOptionPane.showInputDialog("Ingrese el nuevo nombre del proveedor:");
+                PedidoProveedor pedidoActualizado = new PedidoProveedor(idActualizar, nuevaDescripcion, nuevoProveedor);
+                PedidoProveedor.actualizarPedidoProveedor(pedidoActualizado);
+                break;
+            case "5":
+                int idEliminar = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del pedido a eliminar:"));
+                PedidoProveedor.eliminarPedidoProveedor(idEliminar);
+                break;
+            case "6":
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
         }
+    }
 
-        if (!pedido.getProductos().isEmpty()) {
-            Factura factura = new Factura(cliente, pedido);
-            factura.imprimirFactura();
-            historialFacturas.agregarFactura(factura);
-        } else {
-            JOptionPane.showMessageDialog(null, "No se agregaron productos a la factura.");
+    // Método para gestionar facturas
+    private static void gestionarFacturas() {
+        String menuFacturas = JOptionPane.showInputDialog(null,
+                "Gestión de Facturas\n"
+                + "1. Crear Factura\n"
+                + "2. Mostrar Facturas\n"
+                + "3. Volver");
+
+        switch (menuFacturas) {
+            case "1":
+                // Implementa la lógica para crear una nueva factura
+                String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+                Factura nuevaFactura = new Factura(nombreCliente);
+                Factura.crearFactura(nuevaFactura);
+                break;
+            case "2":
+                LinkedList<Factura> facturas = HistorialFacturas.mostrarFacturas();
+                StringBuilder sbFacturas = new StringBuilder("Facturas:\n");
+                for (Factura f : facturas) {
+                    sbFacturas.append(f.toString()).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, sbFacturas.toString());
+                break;
+            case "3":
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
         }
     }
-    
-    private static void mostrarProductosMasVendidos() {
-    	historialFacturas.mostrarProductosMasVendidos();
+
+    // Método para gestionar inventario
+    private static void gestionarInventario() {
+        String menuInventario = JOptionPane.showInputDialog(null,
+                "Gestión de Inventario\n"
+                + "1. Agregar Producto\n"
+                + "2. Mostrar Productos\n"
+                + "3. Actualizar Stock\n"
+                + "4. Eliminar Producto\n"
+                + "5. Verificar Stock\n"
+                + "6. Volver");
+
+        switch (menuInventario) {
+            case "1":
+                String codigo = JOptionPane.showInputDialog("Ingrese el código del producto:");
+                String nombre = JOptionPane.showInputDialog("Ingrese el nombre del producto:");
+                String descripcion = JOptionPane.showInputDialog("Ingrese la descripción del producto:");
+                double precio = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el precio del producto:"));
+                int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad del producto:"));
+                Producto nuevoProducto = new Producto(codigo, nombre, descripcion, precio, cantidad);
+                Inventario.agregarProducto(nuevoProducto);
+                break;
+            case "2":
+                LinkedList<Producto> productos = Inventario.mostrarProductos();
+                StringBuilder sbProductos = new StringBuilder("Productos:\n");
+                for (Producto p : productos) {
+                    sbProductos.append(p.toString()).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, sbProductos.toString());
+                break;
+            case "3":
+                int idActualizarStock = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del producto a actualizar:"));
+                int nuevoStock = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la nueva cantidad del stock:"));
+                Inventario.actualizarStock(idActualizarStock, nuevoStock);
+                break;
+            case "4":
+                int idEliminarProducto = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el ID del producto a eliminar:"));
+                Inventario.eliminarProducto(idEliminarProducto);
+                break;
+            case "5":
+                Inventario.verificarStock();
+                break;
+            case "6":
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
+        }
     }
-    private static void modificarDatosProducto() {
-    	String codigo =  JOptionPane.showInputDialog("Ingrese el codigo del producto: ");
-    	Producto producto = inventario.buscarProductoPorCodigo(codigo);
-    	
-    	if (producto != null) {
-			String[] opciones = {"Nombre", "Descripcion", "Precio", "Cantidad"};
-			int opcion = JOptionPane.showOptionDialog(null, "Elija una opcion: ", "Modificar Producto", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
-			
-			switch (opcion) {
-			case 0:
-				String nuevoNombre = JOptionPane.showInputDialog("Ingrese el nuevo nombre");
-				producto.setNombre(nuevoNombre);
-				break;
-			case 1:
-				String nuevaDescripcion = JOptionPane.showInputDialog("Ingrese la nueva descripcion");
-				producto.setDescripcion(nuevaDescripcion);
-				break;
-			case 2:
-				String nuevoPrecio = JOptionPane.showInputDialog("Ingrese nuevo precio");
-				try {
-					double precio = Double.parseDouble(nuevoPrecio);
-					producto.setPrecio(precio);
-				} catch ( NumberFormatException e) {
-					JOptionPane.showMessageDialog(null, "Precio Invalido");
-				}
-				break;
-			case 3:
-				String cantidadStr = JOptionPane.showInputDialog("Ingrese la cantidad a aumentar");
-		    	JOptionPane.showMessageDialog(null, "Stock actualizado del producto: " + codigo);
-		    	try {
-					int cantidad = Integer.parseInt(cantidadStr);
-					inventario.aumentarStockProducto(codigo, cantidad);
-				} catch ( NumberFormatException e) {
-					JOptionPane.showMessageDialog(null, "Cantidad invalida");
-				}
-				break;
-			default:
-				JOptionPane.showMessageDialog(null, "Opcion no valida");
-				break;
-			}
-		}else {
-			JOptionPane.showMessageDialog(null, "Producto no encontrado");
-		}
+
+    // Método para mostrar historial de facturas y pedidos
+    private static void mostrarHistorial() {
+        String menuHistorial = JOptionPane.showInputDialog(null,
+                "Historial\n"
+                + "1. Mostrar Facturas\n"
+                + "2. Mostrar Pedidos Proveedor\n"
+                + "3. Volver");
+
+        switch (menuHistorial) {
+            case "1":
+                LinkedList<Factura> facturas = HistorialFacturas.mostrarFacturas();
+                StringBuilder sbFacturas = new StringBuilder("Facturas:\n");
+                for (Factura f : facturas) {
+                    sbFacturas.append(f.toString()).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, sbFacturas.toString());
+                break;
+            case "2":
+                LinkedList<PedidoProveedor> pedidos = HistorialPedidos.mostrarPedidos();
+                StringBuilder sbPedidos = new StringBuilder("Pedidos:\n");
+                for (PedidoProveedor p : pedidos) {
+                    sbPedidos.append(p.toString()).append("\n");
+                }
+                JOptionPane.showMessageDialog(null, sbPedidos.toString());
+                break;
+            case "3":
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción no válida.");
+                break;
+        }
     }
-    
-    }
+}
