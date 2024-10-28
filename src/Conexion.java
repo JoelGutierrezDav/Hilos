@@ -2,32 +2,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.swing.JOptionPane;
-
 public class Conexion {
-	
-	private static final String URL = "jdbc:mariadb://localhost:3306/hilos";
+    private static Conexion instancia;
+    private Connection conexion;
 
-	private static final String User = "root";
-	private static final String Pass= "";
-	
-	private static Conexion instance;
-	private Connection con;
-	private Conexion() {
-		try {
-			con = DriverManager.getConnection(URL,User,Pass);
-			JOptionPane.showMessageDialog(null, "Se conecto");
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "No se conecto");
-		}
-	}
-	public static Conexion getInstance() {
-		if(instance==null) {
-			instance = new Conexion();
-		}
-		return instance;
-	}
-	public Connection getConnection() {
-		return con;
-	}
+    private Conexion() {
+        
+        String url = "jdbc:mysql://localhost:3306/hilos";
+        String usuario = "user";
+        String contraseña = "pass";
+
+        try {
+            conexion = DriverManager.getConnection(url, usuario, contraseña);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Conexion getInstance() {
+        if (instancia == null) {
+            instancia = new Conexion();
+        }
+        return instancia;
+    }
+
+    public Connection getConnection() {
+        return conexion;
+    }
 }
+

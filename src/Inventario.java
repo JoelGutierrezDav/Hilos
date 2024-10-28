@@ -3,7 +3,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
-
 import javax.swing.JOptionPane;
 
 public class Inventario {
@@ -17,7 +16,7 @@ public class Inventario {
             ResultSet resultados = statement.executeQuery();
             while (resultados.next()) {
                 Producto producto = new Producto(
-                    resultados.getInt("id"),
+                    resultados.getInt("idproducto"),
                     resultados.getString("Codigo"),
                     resultados.getString("Nombre"),
                     resultados.getString("Descripcion"),
@@ -26,6 +25,11 @@ public class Inventario {
                     resultados.getInt("Stock_minimo")
                 );
                 productos.add(producto);
+
+          
+                if (producto.getStock() < producto.getStockMinimo()) {
+                    JOptionPane.showMessageDialog(null, "Alerta: El producto " + producto.getNombre() + " tiene un stock bajo.");
+                }
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al obtener productos: " + e.getMessage());
@@ -33,7 +37,7 @@ public class Inventario {
         return productos;
     }
 
-   
+ 
     public Producto buscarProductoPorCodigo(String codigo) {
         Producto producto = null;
         try {
@@ -42,7 +46,7 @@ public class Inventario {
             ResultSet resultados = statement.executeQuery();
             if (resultados.next()) {
                 producto = new Producto(
-                    resultados.getInt("id"),
+                    resultados.getInt("idproducto"),
                     resultados.getString("Codigo"),
                     resultados.getString("Nombre"),
                     resultados.getString("Descripcion"),
@@ -57,7 +61,7 @@ public class Inventario {
         return producto;
     }
 
-    
+ 
     public void agregarProducto(Producto producto) {
         try {
             PreparedStatement statement = con.prepareStatement(
@@ -79,7 +83,7 @@ public class Inventario {
         }
     }
 
-    
+
     public void aumentarStockProducto(String codigo, int cantidad) {
         try {
             Producto producto = buscarProductoPorCodigo(codigo);
@@ -101,7 +105,7 @@ public class Inventario {
         }
     }
 
-    
+ 
     public void verificarStock() {
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM producto WHERE Stock < Stock_minimo");
@@ -126,9 +130,10 @@ public class Inventario {
             JOptionPane.showMessageDialog(null, "Error al verificar el stock: " + e.getMessage());
         }
     }
+
+
     public void modificarProducto(Producto producto) {
         try {
-            
             PreparedStatement statement = con.prepareStatement(
                 "UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Stock_minimo = ? WHERE Codigo = ?"
             );
@@ -149,5 +154,5 @@ public class Inventario {
             JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage());
         }
     }
-
 }
+

@@ -1,54 +1,72 @@
-import java.util.HashMap;
-import java.util.Map;
+public class Pedido {
+    private int idPedido;
+    private String fechaPedido;
+    private double total;
+    private String codigoProducto;
+    private int idFactura;
+    private int idCliente;
 
-class Pedido {
-    private Map<Producto, Integer> productos;
-    private String id;
 
-    public Pedido() {
-        productos = new HashMap<>();
-        this.id = generateId();
+    public Pedido(int idPedido, String fechaPedido, double total, String codigoProducto, int idFactura, int idCliente) {
+        this.idPedido = idPedido;
+        this.fechaPedido = fechaPedido;
+        this.total = total;
+        this.codigoProducto = codigoProducto;
+        this.idFactura = idFactura;
+        this.idCliente = idCliente;
     }
 
-    public void agregarProducto(Producto producto, int cantidad) {
-        if (productos.containsKey(producto)) {
-            productos.put(producto, productos.get(producto) + cantidad);
-        } else {
-            productos.put(producto, cantidad);
-        }
+
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public Map<Producto, Integer> getProductos() {
-        return productos;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
-    public double calcularTotal() {
-        double total = 0;
-        for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
-            total += entry.getKey().getPrecio() * entry.getValue();
-        }
+    public String getFechaPedido() {
+        return fechaPedido;
+    }
+
+    public void setFechaPedido(String fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
+    public double getTotal() {
         return total;
     }
 
-    public String getId() {
-        return id;
+    public void setTotal(double total) {
+        this.total = total;
     }
 
-    private String generateId() {
-        return "PEDIDO-" + System.currentTimeMillis();
+    public String getCodigoProducto() {
+        return codigoProducto;
+    }
+
+    public void setCodigoProducto(String codigoProducto) {
+        this.codigoProducto = codigoProducto;
+    }
+
+    public int getIdFactura() {
+        return idFactura;
+    }
+
+    public void setIdFactura(int idFactura) {
+        this.idFactura = idFactura;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("ID de Pedido: ").append(id).append("\n");
-        sb.append("Detalles:\n");
-        for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
-            sb.append("- ").append(entry.getKey().getNombre())
-              .append(" | Cantidad: ").append(entry.getValue())
-              .append("\n");
-        }
-        sb.append("Total: $").append(calcularTotal()).append("\n");
-        return sb.toString();
+        return "Pedido ID: " + idPedido + ", Fecha: " + fechaPedido + ", Total: " + total + ", Producto: " + codigoProducto;
     }
 }
