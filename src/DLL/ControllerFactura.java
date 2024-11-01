@@ -1,10 +1,19 @@
+package DLL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+
+import BLL.Cliente;
+import BLL.Factura;
+import BLL.Inventario;
+import BLL.Pedido;
+
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,8 +32,8 @@ public class ControllerFactura {
         this.con = Conexion.getInstance().getConnection(); 
     }
 
-    public void crearFactura(Cliente cliente, Pedido pedido) {
-        this.factura = new Factura(cliente, pedido);
+    public void crearFactura(Cliente cliente,  LocalDate fecha) {
+        this.factura = new Factura(fecha, total, cliente);
         guardarFacturaEnBaseDatos();
         imprimirFactura();
     }
@@ -34,9 +43,9 @@ public class ControllerFactura {
             PreparedStatement statement = con.prepareStatement(
                 "INSERT INTO factura (Fecha, Total, cliente_idcliente) VALUES (?, ?, ?)"
             );
-            statement.setDate(1, java.sql.Date.valueOf(factura.getFechaEmision().toLocalDate()));
+            statement.setDate(1, Date.valueOf(factura.getFecha()));
             statement.setDouble(2, factura.getTotal());
-            statement.setInt(3, factura.getCliente().getId());
+            statement.setInt(3, factura.getClienteId());
 
             int filas = statement.executeUpdate();
             if (filas > 0) {

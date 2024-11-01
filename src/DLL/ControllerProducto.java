@@ -1,9 +1,12 @@
+package DLL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
+
+import BLL.Producto;
 
 public class ControllerProducto {
     private Connection con;

@@ -1,9 +1,12 @@
+package DLL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+
+import BLL.Pedido;
 
 public class ControllerPedido {
     private static Connection con = Conexion.getInstance().getConnection();

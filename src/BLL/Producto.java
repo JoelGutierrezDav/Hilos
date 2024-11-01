@@ -1,3 +1,4 @@
+package BLL;
 public class Producto {
     private int id;
     private String codigo;

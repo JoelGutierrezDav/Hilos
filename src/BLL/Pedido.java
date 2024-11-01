@@ -1,3 +1,4 @@
+package BLL;
 public class Pedido {
     private int idPedido;
     private String fechaPedido;

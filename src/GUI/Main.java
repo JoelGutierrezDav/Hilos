@@ -1,4 +1,8 @@
+package GUI;
 import javax.swing.JOptionPane;
+
+import BLL.Cliente;
+
 import java.util.LinkedList;
 
 public class Main {

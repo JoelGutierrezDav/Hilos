@@ -1,3 +1,4 @@
+package BLL;
 public class HistorialFacturas {
     private int idHistorial;
     private int facturaId;
