@@ -1,17 +1,16 @@
 package BLL;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
-
 import DLL.Conexion;
 
 public class Inventario {
     private static Connection con = Conexion.getInstance().getConnection();
 
-    
     public LinkedList<Producto> getProductos() {
         LinkedList<Producto> productos = new LinkedList<>();
         try {
@@ -29,7 +28,6 @@ public class Inventario {
                 );
                 productos.add(producto);
 
-          
                 if (producto.getStock() < producto.getStockMinimo()) {
                     JOptionPane.showMessageDialog(null, "Alerta: El producto " + producto.getNombre() + " tiene un stock bajo.");
                 }
@@ -40,7 +38,6 @@ public class Inventario {
         return productos;
     }
 
- 
     public Producto buscarProductoPorCodigo(String codigo) {
         Producto producto = null;
         try {
@@ -64,7 +61,6 @@ public class Inventario {
         return producto;
     }
 
- 
     public void agregarProducto(Producto producto) {
         try {
             PreparedStatement statement = con.prepareStatement(
@@ -76,7 +72,7 @@ public class Inventario {
             statement.setDouble(4, producto.getPrecio());
             statement.setInt(5, producto.getStock());
             statement.setInt(6, producto.getStockMinimo());
-            
+
             int filas = statement.executeUpdate();
             if (filas > 0) {
                 JOptionPane.showMessageDialog(null, "Producto agregado exitosamente.");
@@ -85,7 +81,6 @@ public class Inventario {
             JOptionPane.showMessageDialog(null, "Error al agregar producto: " + e.getMessage());
         }
     }
-
 
     public void aumentarStockProducto(String codigo, int cantidad) {
         try {
@@ -108,7 +103,6 @@ public class Inventario {
         }
     }
 
- 
     public void verificarStock() {
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM producto WHERE Stock < Stock_minimo");
@@ -125,7 +119,7 @@ public class Inventario {
             }
 
             if (productosBajoStock.length() == 0) {
-                JOptionPane.showMessageDialog(null, "No hay productos con stock bajo.");
+                JOptionPane.showMessageDialog (null, "No hay productos con stock bajo.");
             } else {
                 JOptionPane.showMessageDialog(null, "Productos con stock bajo:\n" + productosBajoStock.toString());
             }
@@ -133,7 +127,6 @@ public class Inventario {
             JOptionPane.showMessageDialog(null, "Error al verificar el stock: " + e.getMessage());
         }
     }
-
 
     public void modificarProducto(Producto producto) {
         try {
@@ -158,4 +151,3 @@ public class Inventario {
         }
     }
 }
-

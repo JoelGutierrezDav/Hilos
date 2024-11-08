@@ -1,4 +1,5 @@
 package BLL;
+
 import java.time.LocalDate;
 
 public class Factura {
@@ -7,7 +8,6 @@ public class Factura {
     private double total;
     private int clienteId;
 
-
     public Factura(int id, LocalDate fecha, double total, int clienteId) {
         this.id = id;
         this.fecha = fecha;
@@ -15,57 +15,27 @@ public class Factura {
         this.clienteId = clienteId;
     }
 
-
-    public Factura(LocalDate fecha, double total, int clienteId) {
-        this.fecha = fecha;
-        this.total = total;
-        this.clienteId = clienteId;
-    }
-
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
     public double getTotal() {
         return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public int getClienteId() {
         return clienteId;
     }
 
-    public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
-    }
-
     @Override
     public String toString() {
-        return "Factura{" +
-                "id=" + id +
-                ", fecha=" + fecha +
-                ", total=" + total +
-                ", clienteId=" + clienteId +
-                '}';
+        return "Factura ID: " + id + ", Fecha: " + fecha + ", Total: " + total + ", Cliente ID: " + clienteId;
     }
 }
-
     /*public void imprimirFactura() {
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/mm/yy hh:mm");
         StringBuilder factura = new StringBuilder();

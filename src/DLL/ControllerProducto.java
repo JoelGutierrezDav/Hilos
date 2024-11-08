@@ -1,11 +1,8 @@
 package DLL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
-
 import BLL.Producto;
 
 public class ControllerProducto {
@@ -15,16 +12,11 @@ public class ControllerProducto {
         this.con = Conexion.getInstance().getConnection();
     }
 
-   
     public void agregarProducto(Producto producto) {
-        agregarProductoEnBD(producto);
-        agregarProductoInventario(producto);
-    }
-
- 
-    private void agregarProductoEnBD(Producto producto) {
-        String sql = "INSERT INTO producto (Codigo, Nombre, Descripcion, Precio, Stock, Stock_minimo) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try {
+            PreparedStatement statement = con.prepareStatement(
+                "INSERT INTO producto (Codigo, Nombre, Descripcion, Precio, Stock, Stock_minimo) VALUES (?, ?, ?, ?, ?, ?)"
+            );
             statement.setString(1, producto.getCodigo());
             statement.setString(2, producto.getNombre());
             statement.setString(3, producto.getDescripcion());
@@ -38,96 +30,32 @@ public class ControllerProducto {
         }
     }
 
-
-    private void agregarProductoInventario(Producto producto) {
-        String sql = "INSERT INTO Inventario (producto_idproducto, ...) VALUES (?, ...)";
-
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, producto.getCodigo());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al agregar al inventario: " + e.getMessage());
-        }
-    }
-
-
-    public void modificarProducto(Producto producto) {
-        modificarProductoEnBD(producto);
-        actualizarInventario(producto);
-    }
-
-
-    private void modificarProductoEnBD(Producto producto) {
-        String sql = "UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Stock_minimo = ? WHERE Codigo = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, producto.getNombre());
-            statement.setString(2, producto.getDescripcion());
-            statement.setDouble(3, producto.getPrecio());
-            statement.setInt(4, producto.getStock());
-            statement.setInt(5, producto.getStockMinimo());
-            statement.setString(6, producto.getCodigo());
-            int filas = statement.executeUpdate();
-            if (filas > 0) {
-                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el producto.");
+    public LinkedList<Producto> obtenerProductos() {
+        LinkedList<Producto> productos = new LinkedList<>();
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM producto");
+            ResultSet resultados = statement.executeQuery();
+            while (resultados.next()) {
+                productos.add(new Producto(
+                    resultados.getInt("idproducto"),
+                    resultados.getString("Codigo"),
+                    resultados.getString("Nombre"),
+                    resultados.getString("Descripcion"),
+                    resultados.getDouble("Precio"),
+                    resultados.getInt("Stock"),
+                    resultados.getInt("Stock_minimo")
+                ));
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al obtener productos: " + e.getMessage());
         }
+        return productos;
     }
 
-
-    private void actualizarInventario(Producto producto) {
-        String sql = "UPDATE Inventario SET ... WHERE producto_idproducto = ?";
-
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, producto.getCodigo());
-
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el inventario: " + e.getMessage());
-        }
-    }
-
-
-    public void eliminarProducto(String codigo) {
-        eliminarProductoEnBD(codigo);
-        eliminarProductoInventario(codigo);
-    }
-
-
-    private void eliminarProductoEnBD(String codigo) {
-        String sql = "DELETE FROM producto WHERE Codigo = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, codigo);
-            int filas = statement.executeUpdate();
-            if (filas > 0) {
-                JOptionPane.showMessageDialog(null, "Producto eliminado exitosamente.");
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el producto.");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + e.getMessage());
-        }
-    }
-
-  
-    private void eliminarProductoInventario(String codigo) {
-        String sql = "DELETE FROM Inventario WHERE producto_idproducto = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, codigo);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar del inventario: " + e.getMessage());
-        }
-    }
-
-  
     public Producto buscarProductoPorCodigo(String codigo) {
         Producto producto = null;
-        String sql = "SELECT * FROM producto WHERE Codigo = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM producto WHERE Codigo = ?");
             statement.setString(1, codigo);
             ResultSet resultados = statement.executeQuery();
             if (resultados.next()) {
@@ -147,27 +75,44 @@ public class ControllerProducto {
         return producto;
     }
 
-
-    public LinkedList<Producto> obtenerProductos() {
-        LinkedList<Producto> productos = new LinkedList<>();
-        String sql = "SELECT * FROM producto";
-        try (PreparedStatement statement = con.prepareStatement(sql);
-             ResultSet resultados = statement.executeQuery()) {
-            while (resultados.next()) {
-                Producto producto = new Producto(
-                    resultados.getInt("idproducto"),
-                    resultados.getString("Codigo"),
-                    resultados.getString("Nombre"),
-                    resultados.getString("Descripcion"),
-                    resultados.getDouble("Precio"),
-                    resultados.getInt("Stock"),
-                    resultados.getInt("Stock_minimo")
-                );
-                productos.add(producto);
+    public boolean modificarProducto(Producto producto) {
+        try {
+            PreparedStatement statement = con.prepareStatement(
+                "UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Stock_minimo = ? WHERE Codigo = ?"
+            );
+            statement.setString(1, producto.getNombre());
+            statement.setString(2, producto.getDescripcion());
+            statement.setDouble(3, producto.getPrecio());
+            statement.setInt(4, producto.getStock());
+            statement.setInt(5, producto.getStockMinimo());
+            statement.setString(6, producto.getCodigo());
+            int filasAfectadas = statement.executeUpdate();
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el producto.");
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al obtener productos: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage());
         }
-        return productos;
+        return false;
+    }
+
+    public boolean eliminarProducto(String codigo) {
+        try {
+            PreparedStatement statement = con.prepareStatement("DELETE FROM producto WHERE Codigo = ?");
+            statement.setString(1, codigo);
+            int filasAfectadas = statement.executeUpdate();
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(null, "Producto eliminado exitosamente.");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró el producto.");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + e.getMessage());
+        }
+        return false;
     }
 }

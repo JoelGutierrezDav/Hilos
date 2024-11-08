@@ -1,13 +1,12 @@
 package DLL;
 
-import java.time.LocalDate;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-
-import BLL.Cliente;
 import BLL.Factura;
+import BLL.Cliente;
 import BLL.Producto;
 
 public class ControllerFactura {
@@ -37,7 +36,6 @@ public class ControllerFactura {
                     int facturaId = generatedKeys.getInt(1);
                     guardarDetallesFactura(facturaId, productos, cantidades);
                     JOptionPane.showMessageDialog(null, "Factura creada con éxito.");
-                    imprimirFactura(facturaId);
                 }
             }
         } catch (SQLException e) {
@@ -62,46 +60,12 @@ public class ControllerFactura {
             statement.setDouble(2, productos.get(i).getPrecio() * cantidades.get(i));
             statement.setInt(3, productos.get(i).getId());
             statement.setInt(4, facturaId);
-            statement.setInt(5, 1); // Asumiendo que el cliente_idcliente es 1, ajusta según sea necesario
+            statement.setInt(5, 1); 
             statement.addBatch();
         }
         statement.executeBatch();
     }
 
-    public void imprimirFactura(int facturaId) {
-        try {
-            PreparedStatement statement = con.prepareStatement(
-                "SELECT f.*, c.Nombre as NombreCliente, p.Nombre as NombreProducto, pe.Total as TotalProducto " +
-                "FROM factura f " +
-                "JOIN cliente c ON f.cliente_idcliente = c.idcliente " +
-                "JOIN pedido pe ON f.idfactura = pe.factura_idfactura " +
-                "JOIN producto p ON pe.producto_idproducto = p.idproducto " +
-                "WHERE f.idfactura = ?"
-            );
-            statement.setInt(1, facturaId);
-            ResultSet rs = statement.executeQuery();
-
-            StringBuilder facturaStr = new StringBuilder();
-            facturaStr.append("Factura #").append(facturaId).append("\n");
-            
-            if (rs.next()) {
-                facturaStr.append("Cliente: ").append(rs.getString("NombreCliente")).append("\n");
-                facturaStr.append("Fecha: ").append(rs.getDate("Fecha")).append("\n\n");
-                facturaStr.append("Productos:\n");
-                
-                do {
-                    facturaStr.append("- ").append(rs.getString("NombreProducto"))
-                              .append(" | Total: $").append(rs.getDouble("TotalProducto")).append("\n");
-                } while (rs.next());
-                
-                facturaStr.append("\nTotal: $").append(rs.getDouble("Total"));
-            }
-            
-            JOptionPane.showMessageDialog(null, facturaStr.toString(), "Factura Detallada", JOptionPane.INFORMATION_MESSAGE);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al imprimir la factura: " + e.getMessage());
-        }
-    }
 
     public List<Factura> mostrarFacturas() {
         List<Factura> facturas = new ArrayList<>();
@@ -109,11 +73,10 @@ public class ControllerFactura {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM factura");
             ResultSet resultados = statement.executeQuery();
             while (resultados.next()) {
-                int id = resultados.getInt("idfact ura");
+                int id = resultados.getInt("idfactura");
                 LocalDate fecha = resultados.getDate("Fecha").toLocalDate();
                 double total = resultados.getDouble("Total");
                 int clienteId = resultados.getInt("cliente_idcliente");
-                Cliente cliente = new Cliente(clienteId, resultados.getString("Nombre")); // Asumiendo que tienes un método para obtener el nombre del cliente
                 facturas.add(new Factura(id, fecha, total, clienteId));
             }
         } catch (SQLException e) {

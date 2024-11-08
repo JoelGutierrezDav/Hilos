@@ -1,14 +1,15 @@
 package BLL;
-public class Cliente {
-    private String nombre;
-    private int id;
 
-    public Cliente(int id, String nombre) {
-        this.id = id;
+public class Cliente {
+    private int id;
+    private String nombre;
+
+    public Cliente(String nombre) {
         this.nombre = nombre;
     }
 
-    public Cliente(String nombre) {
+    public Cliente(int id, String nombre) {
+        this.id = id;
         this.nombre = nombre;
     }
 
