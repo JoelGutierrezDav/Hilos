@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import BLL.Cliente;
+import DLL.Conexion;
 
 public class ControllerCliente {
     private Connection con;

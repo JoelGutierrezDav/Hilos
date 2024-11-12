@@ -365,7 +365,7 @@ public class Main {
     private static void menuFacturas() {
         String[] opciones = {"Crear Factura", "Listar Facturas", "Volver"};
         while (true) {
-            int opcion = JOptionPane.showOptionDialog(null, "--- GESTIÓN DE FACTURAS ---", "Menú Facturas",
+            int opcion = JOptionPane.showOptionDialog(null, " GESTIÓN DE FACTURAS ", "Menú Facturas",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
             switch (opcion) {
@@ -425,7 +425,7 @@ public class Main {
         if (facturas.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay facturas registradas.");
         } else {
-            StringBuilder sb = new StringBuilder("--- LISTA DE FACTURAS ---\n");
+            StringBuilder sb = new StringBuilder(" LISTA DE FACTURAS \n");
             for (Factura factura : facturas) {
                 sb.append(factura).append("\n");
             }
@@ -435,7 +435,7 @@ public class Main {
     private static void menuInventario() {
         String[] opciones = {"Listar Productos", "Verificar Stock", "Volver"};
         while (true) {
-            int opcion = JOptionPane.showOptionDialog(null, "--- GESTIÓN DE INVENTARIO ---", "Menú Inventario",
+            int opcion = JOptionPane.showOptionDialog(null, " GESTIÓN DE INVENTARIO ", "Menú Inventario",
                     JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opciones, opciones[0]);
 
             switch (opcion) {

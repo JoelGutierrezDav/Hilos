@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
-import org.mariadb.jdbc.Connection;
+import java.sql.Connection; 
 
 import DLL.Conexion;
 
