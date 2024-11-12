@@ -11,10 +11,8 @@ public class Conexion {
     private Conexion() {
         try {
             Class.forName("org.mariadb.jdbc.Driver"); // Cargar el controlador de MariaDB
-            String url = "jdbc:mariadb://localhost:3306/hilos";
-            String usuario = "user"; // Cambia esto por tu usuario
-            String contraseña = "pass"; // Cambia esto por tu contraseña
-            conexion = DriverManager.getConnection(url, usuario, contraseña);
+            String url = "jdbc:mariadb://localhost:3306/tu_nombre_de_base_de_datos"; // Cambia esto por tu base de datos
+            conexion = DriverManager.getConnection(url); // No se pasan usuario ni contraseña
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Driver no encontrado.");
