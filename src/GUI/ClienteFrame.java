@@ -1,42 +1,37 @@
 package GUI;
 
-import java.awt.EventQueue;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+public class ClienteFrame extends JInternalFrame {
+    private JTextField nombreField;
+    private JButton agregarButton;
 
-public class ClienteFrame extends JFrame {
+    public ClienteFrame() {
+        setTitle("Gestión de Clientes");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+        JLabel nombreLabel = new JLabel("Nombre:");
+        nombreLabel.setBounds(10, 20, 80, 25);
+        add(nombreLabel);
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClienteFrame frame = new ClienteFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        nombreField = new JTextField();
+        nombreField.setBounds(100, 20, 165, 25);
+        add(nombreField);
 
-	/**
-	 * Create the frame.
-	 */
-	public ClienteFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        agregarButton = new JButton("Agregar Cliente");
+        agregarButton.setBounds(10, 80, 150, 25);
+        add(agregarButton);
 
-		setContentPane(contentPane);
-	}
-
+        agregarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombre = nombreField.getText();
+                JOptionPane.showMessageDialog(null, "Cliente agregado: " + nombre);
+            }
+        });
+    }
 }
