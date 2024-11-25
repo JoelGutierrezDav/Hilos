@@ -1,96 +1,114 @@
 package GUI;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.Color;
 
 public class MenuFrame extends JFrame {
-    private JDesktopPane desktopPane;
-    private JButton clienteButton;
-    private JButton facturaButton;
-    private JButton inventarioButton;
-    private JButton pedidoButton;
-    private JButton productoButton;
 
-    public MenuFrame() {
-        setTitle("Menú Principal");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
 
-        desktopPane = new JDesktopPane();
-        desktopPane.setBounds(0, 0, 400, 300);
-        add(desktopPane);
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MenuFrame frame = new MenuFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-        clienteButton = new JButton("Gestión de Clientes");
-        clienteButton.setBounds(10, 10, 180, 30);
-        add(clienteButton);
+	/**
+	 * Create the frame.
+	 */
+	public MenuFrame() {
+		setTitle("Hilos Joel");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(new Color(255, 128, 128));
+		setJMenuBar(menuBar);
+		
+		JMenu mnClientes = new JMenu("Clientes");
+		menuBar.add(mnClientes);
+		
+		JMenuItem mntmcrearCliente = new JMenuItem("Agregar");
+		mnClientes.add(mntmcrearCliente);
+		
+		JMenuItem mntmmostrarClientes = new JMenuItem("Lista");
+		mnClientes.add(mntmmostrarClientes);
+		
+		JMenuItem mntmbuscarCliente = new JMenuItem("Buscar");
+		mnClientes.add(mntmbuscarCliente);
+		
+		JMenuItem mntmactualizarCliente = new JMenuItem("Actualizar");
+		mnClientes.add(mntmactualizarCliente);
+		
+		JMenuItem mntmeliminarCliente = new JMenuItem("Eliminar");
+		mnClientes.add(mntmeliminarCliente);
+		
+		JMenu mnProductos = new JMenu("Productos");
+		menuBar.add(mnProductos);
+		
+		JMenuItem mntmagregarProducto = new JMenuItem("Agregar");
+		mnProductos.add(mntmagregarProducto);
+		
+		JMenuItem mntmobtenerProductos = new JMenuItem("Lista");
+		mnProductos.add(mntmobtenerProductos);
+		
+		JMenuItem mntmbuscarProductoPorCodigo = new JMenuItem("Buscar");
+		mnProductos.add(mntmbuscarProductoPorCodigo);
+		
+		JMenuItem mntmmodificarProducto = new JMenuItem("Aumentar Stock");
+		mnProductos.add(mntmmodificarProducto);
+		
+		JMenuItem mntmverificarStock = new JMenuItem("Verificar Stock");
+		mnProductos.add(mntmverificarStock);
+		
+		JMenu mnPedidos = new JMenu("Pedidos");
+		menuBar.add(mnPedidos);
+		
+		JMenuItem mntmagregarPedido = new JMenuItem("Agregar");
+		mnPedidos.add(mntmagregarPedido);
+		
+		JMenuItem mntmmostrarPedidos = new JMenuItem("Lista");
+		mnPedidos.add(mntmmostrarPedidos);
+		
+		JMenuItem mntmbuscarPedido = new JMenuItem("Buscar");
+		mnPedidos.add(mntmbuscarPedido);
+		
+		JMenuItem mntmmodificarPedido = new JMenuItem("Actualizar");
+		mnPedidos.add(mntmmodificarPedido);
+		
+		JMenuItem mntmeliminarPedido = new JMenuItem("Eliminar");
+		mnPedidos.add(mntmeliminarPedido);
+		
+		JMenu mnFacturas = new JMenu("Facturas");
+		menuBar.add(mnFacturas);
+		
+		JMenuItem mntmmostrarFacturas = new JMenuItem("Lista");
+		mnFacturas.add(mntmmostrarFacturas);
+		
+		JMenuItem mntmcrearFactura = new JMenuItem("Crear");
+		mnFacturas.add(mntmcrearFactura);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        facturaButton = new JButton("Gestión de Facturas");
-        facturaButton.setBounds(210, 10, 180, 30);
-        add(facturaButton);
+		setContentPane(contentPane);
+	}
 
-        inventarioButton = new JButton("Gestión de Inventario");
-        inventarioButton.setBounds(10, 50, 180, 30);
-        add(inventarioButton);
-
-        pedidoButton = new JButton("Gestión de Pedidos");
-        pedidoButton.setBounds(210, 50, 180, 30);
-        add(pedidoButton);
-
-        productoButton = new JButton("Gestión de Productos");
-        productoButton.setBounds(10, 90, 180, 30);
-        add(productoButton);
-
-        // Action Listeners for buttons
-        clienteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ClienteFrame clienteFrame = new ClienteFrame();
-                desktopPane.add(clienteFrame);
-                clienteFrame.setVisible(true);
-            }
-        });
-
-        facturaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FacturaFrame facturaFrame = new FacturaFrame();
-                desktopPane.add(facturaFrame);
-                facturaFrame.setVisible(true);
-            }
-        });
-
-        inventarioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                InventarioFrame inventarioFrame = new InventarioFrame();
-                desktopPane.add(inventarioFrame);
-                inventarioFrame.setVisible(true);
-            }
-        });
-
-        pedidoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PedidoFrame pedidoFrame = new PedidoFrame();
-                desktopPane.add(pedidoFrame);
-                pedidoFrame.setVisible(true);
-            }
-        });
-
-        productoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ProductoFrame productoFrame = new ProductoFrame();
-                desktopPane.add(productoFrame);
-                productoFrame.setVisible(true);
-            }
-        });
-    }
-
-    public static void main(String[] args) {
-        MenuFrame mainFrame = new MenuFrame();
-        mainFrame.setVisible(true);
-    }
 }
