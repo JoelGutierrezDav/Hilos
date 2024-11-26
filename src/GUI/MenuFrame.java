@@ -1,114 +1,149 @@
 package GUI;
 
-import java.awt.EventQueue;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Color;
+import BLL.Inventario;
+
+import java.awt.*;
+import DLL.ControllerCliente;
+import DLL.ControllerPedido;
+import DLL.ControllerProducto;
+import DLL.ControllerFactura;
+import BLL.Inventario;
 
 public class MenuFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+    private JTextArea textArea;
+    private ControllerCliente controllerCliente;
+    private ControllerPedido controllerPedido;
+    private ControllerProducto controllerProducto;
+    private ControllerFactura controllerFactura;
+    private Inventario inventario;
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    public MenuFrame(ControllerCliente controllerCliente, ControllerPedido controllerPedido, ControllerProducto controllerProducto, ControllerFactura controllerFactura) {
+        this.controllerCliente = controllerCliente;
+        this.controllerPedido = controllerPedido;
+        this.controllerProducto = controllerProducto;
+        this.controllerFactura = controllerFactura;
+        this.inventario = new Inventario();
+        initialize();
+    }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MenuFrame frame = new MenuFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private void initialize() {
+        setTitle("Hilos Joel");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        
+        contentPane = new JPanel(); 
+        contentPane.setLayout(new BorderLayout()); 
+        setContentPane(contentPane);
+        
+        textArea = new JTextArea(); 
+        textArea.setEditable(false); 
+        contentPane.add(new JScrollPane(textArea), BorderLayout.CENTER); 
+        
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
 
-	/**
-	 * Create the frame.
-	 */
-	public MenuFrame() {
-		setTitle("Hilos Joel");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBackground(new Color(255, 128, 128));
-		setJMenuBar(menuBar);
-		
-		JMenu mnClientes = new JMenu("Clientes");
-		menuBar.add(mnClientes);
-		
-		JMenuItem mntmcrearCliente = new JMenuItem("Agregar");
-		mnClientes.add(mntmcrearCliente);
-		
-		JMenuItem mntmmostrarClientes = new JMenuItem("Lista");
-		mnClientes.add(mntmmostrarClientes);
-		
-		JMenuItem mntmbuscarCliente = new JMenuItem("Buscar");
-		mnClientes.add(mntmbuscarCliente);
-		
-		JMenuItem mntmactualizarCliente = new JMenuItem("Actualizar");
-		mnClientes.add(mntmactualizarCliente);
-		
-		JMenuItem mntmeliminarCliente = new JMenuItem("Eliminar");
-		mnClientes.add(mntmeliminarCliente);
-		
-		JMenu mnProductos = new JMenu("Productos");
-		menuBar.add(mnProductos);
-		
-		JMenuItem mntmagregarProducto = new JMenuItem("Agregar");
-		mnProductos.add(mntmagregarProducto);
-		
-		JMenuItem mntmobtenerProductos = new JMenuItem("Lista");
-		mnProductos.add(mntmobtenerProductos);
-		
-		JMenuItem mntmbuscarProductoPorCodigo = new JMenuItem("Buscar");
-		mnProductos.add(mntmbuscarProductoPorCodigo);
-		
-		JMenuItem mntmmodificarProducto = new JMenuItem("Aumentar Stock");
-		mnProductos.add(mntmmodificarProducto);
-		
-		JMenuItem mntmverificarStock = new JMenuItem("Verificar Stock");
-		mnProductos.add(mntmverificarStock);
-		
-		JMenu mnPedidos = new JMenu("Pedidos");
-		menuBar.add(mnPedidos);
-		
-		JMenuItem mntmagregarPedido = new JMenuItem("Agregar");
-		mnPedidos.add(mntmagregarPedido);
-		
-		JMenuItem mntmmostrarPedidos = new JMenuItem("Lista");
-		mnPedidos.add(mntmmostrarPedidos);
-		
-		JMenuItem mntmbuscarPedido = new JMenuItem("Buscar");
-		mnPedidos.add(mntmbuscarPedido);
-		
-		JMenuItem mntmmodificarPedido = new JMenuItem("Actualizar");
-		mnPedidos.add(mntmmodificarPedido);
-		
-		JMenuItem mntmeliminarPedido = new JMenuItem("Eliminar");
-		mnPedidos.add(mntmeliminarPedido);
-		
-		JMenu mnFacturas = new JMenu("Facturas");
-		menuBar.add(mnFacturas);
-		
-		JMenuItem mntmmostrarFacturas = new JMenuItem("Lista");
-		mnFacturas.add(mntmmostrarFacturas);
-		
-		JMenuItem mntmcrearFactura = new JMenuItem("Crear");
-		mnFacturas.add(mntmcrearFactura);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        // Menú de Clientes
+        JMenu mnClientes = new JMenu("Clientes");
+        mnClientes.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        menuBar.add(mnClientes);
 
-		setContentPane(contentPane);
-	}
+        JMenuItem mntmCrearCliente = new JMenuItem("Agregar");
+        mntmCrearCliente.addActionListener(e -> cambiarContenido(new VistaAgregarCliente(controllerCliente)));
+        mnClientes.add(mntmCrearCliente);
 
+        JMenuItem mntmMostrarClientes = new JMenuItem("Lista");
+        mntmMostrarClientes.addActionListener(e -> cambiarContenido(new VistaListaClientes(controllerCliente)));
+        mnClientes.add(mntmMostrarClientes);
+
+        JMenuItem mntmBuscarCliente = new JMenuItem("Buscar");
+        mntmBuscarCliente .addActionListener(e -> cambiarContenido(new VistaBuscarCliente(controllerCliente)));
+        mnClientes.add(mntmBuscarCliente);
+
+        JMenuItem mntmActualizarCliente = new JMenuItem("Actualizar");
+        mntmActualizarCliente.addActionListener(e -> cambiarContenido(new VistaActualizarCliente(controllerCliente)));
+        mnClientes.add(mntmActualizarCliente);
+
+        JMenuItem mntmEliminarCliente = new JMenuItem("Eliminar");
+        mntmEliminarCliente.addActionListener(e -> cambiarContenido(new VistaEliminarClientes(controllerCliente)));
+        mnClientes.add(mntmEliminarCliente);
+
+        // Menú de Productos
+        JMenu mnProductos = new JMenu("Productos");
+        mnProductos.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        menuBar.add(mnProductos);
+
+        JMenuItem mntmAgregarProducto = new JMenuItem("Agregar");
+        mntmAgregarProducto.addActionListener(e -> cambiarContenido(new VistaAgregarProducto(controllerProducto)));
+        mnProductos.add(mntmAgregarProducto);
+
+        JMenuItem mntmListarProductos = new JMenuItem("Listar");
+        mntmListarProductos.addActionListener(e -> cambiarContenido(new VistaListaProducto(controllerProducto)));
+        mnProductos.add(mntmListarProductos);
+
+        JMenuItem mntmBuscarProducto = new JMenuItem("Buscar");
+        mntmBuscarProducto.addActionListener(e -> cambiarContenido(new VistaBuscarProducto(controllerProducto)));
+        mnProductos.add(mntmBuscarProducto);
+        
+     
+        JMenuItem mntmAumentarStock = new JMenuItem("Aumentar Stock");
+        mntmAumentarStock.addActionListener(e -> cambiarContenido(new VistaAumentarStock(controllerProducto)));
+        mnProductos.add(mntmAumentarStock);
+
+ 
+        JMenuItem mntmVerificarStock = new JMenuItem("Verificar Stock");
+        mntmVerificarStock.addActionListener(e -> cambiarContenido(new VistaVerificarStock(inventario))); 
+        mnProductos.add(mntmVerificarStock);
+        
+        // Menú de Pedidos
+        JMenu mnPedidos = new JMenu("Pedidos");
+        mnPedidos.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        menuBar.add(mnPedidos);
+
+        JMenuItem mntmAgregarPedido = new JMenuItem("Agregar");
+        mntmAgregarPedido.addActionListener(e -> cambiarContenido(new VistaAgregarPedido(controllerPedido)));
+        mnPedidos.add(mntmAgregarPedido);
+
+        JMenuItem mntmListarPedidos = new JMenuItem("Listar");
+        mntmListarPedidos.addActionListener(e -> cambiarContenido(new VistaListaPedidos(controllerPedido)));
+        mnPedidos.add(mntmListarPedidos);
+
+        // Menú de Facturas
+        JMenu mnFacturas = new JMenu("Facturas");
+        mnFacturas.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        menuBar.add(mnFacturas);
+
+        JMenuItem mntmCrearFactura = new JMenuItem("Crear");
+		mntmCrearFactura.addActionListener(e -> cambiarContenido(new VistaAgregarFactura(inventario)));
+        mnFacturas.add(mntmCrearFactura);
+
+        JMenuItem mntmListarFacturas = new JMenuItem("Listar");
+        mntmListarFacturas.addActionListener(e -> cambiarContenido(new VistaListaFacturas(controllerFactura)));
+        mnFacturas.add(mntmListarFacturas);
+
+        // Panel de contenido
+        contentPane = new JPanel();
+        contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(new JPanel(), BorderLayout.CENTER); 
+        
+        
+    }
+
+    private void cambiarContenido(JPanel nuevoPanel) {
+        contentPane.removeAll(); 
+        contentPane.add(nuevoPanel, BorderLayout.CENTER); 
+        contentPane.revalidate(); 
+        contentPane.repaint(); 
+    }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            MenuFrame frame = new MenuFrame(new ControllerCliente(), new ControllerPedido(), new ControllerProducto(), new ControllerFactura());
+            frame.setVisible(true);
+        });
+    }
 }

@@ -4,12 +4,15 @@ import java.sql.*;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import BLL.Producto;
+import BLL.Inventario;
 
 public class ControllerProducto {
     private Connection con;
+    private Inventario inventario;
 
     public ControllerProducto() {
         this.con = Conexion.getInstance().getConnection();
+        this.inventario = new Inventario();
     }
 
     public void agregarProducto(Producto producto) {
@@ -75,28 +78,29 @@ public class ControllerProducto {
         return producto;
     }
 
-    public boolean modificarProducto(Producto producto) {
-        try {
-            PreparedStatement statement = con.prepareStatement(
-                "UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Stock_minimo = ? WHERE Codigo = ?"
-            );
-            statement.setString(1, producto.getNombre());
-            statement.setString(2, producto.getDescripcion());
-            statement.setDouble(3, producto.getPrecio());
-            statement.setInt(4, producto.getStock());
-            statement.setInt(5, producto.getStockMinimo());
-            statement.setString(6, producto.getCodigo());
-            int filasAfectadas = statement.executeUpdate();
-            if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
-                return true;
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el producto.");
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage());
-        }
-        return false;
+    public boolean modificarProducto(Producto producto) { 
+        try { 
+            PreparedStatement statement = con.prepareStatement( 
+                "UPDATE producto SET Nombre = ?, Descripcion = ?, Precio = ?, Stock = ?, Stock_minimo = ? WHERE Codigo = ?" 
+            ); 
+            statement.setString(1, producto.getNombre()); 
+            statement.setString(2, producto.getDescripcion()); 
+            statement.setDouble(3, producto.getPrecio()); 
+            statement.setInt(4, producto.getStock()); 
+            statement.setInt(5, producto.getStockMinimo()); 
+            statement.setString(6, producto.getCodigo()); 
+
+            int filasAfectadas = statement.executeUpdate(); 
+            if (filasAfectadas > 0) { 
+                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente. "); 
+                return true; 
+            } else { 
+                JOptionPane.showMessageDialog(null, "No se encontró el producto. "); 
+            } 
+        } catch (SQLException e) { 
+            JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage()); 
+        } 
+        return false; 
     }
 
     public boolean eliminarProducto(String codigo) {
@@ -114,5 +118,8 @@ public class ControllerProducto {
             JOptionPane.showMessageDialog(null, "Error al eliminar el producto: " + e.getMessage());
         }
         return false;
+    }
+    public LinkedList<Producto> obtenerProductosBajoStockMinimo() {
+        return inventario.obtenerProductosBajoStockMinimo();
     }
 }

@@ -3,6 +3,7 @@ package DLL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import BLL.Factura;
@@ -67,21 +68,32 @@ public class ControllerFactura {
     }
 
 
-    public List<Factura> mostrarFacturas() {
-        List<Factura> facturas = new ArrayList<>();
+    public LinkedList<Factura> mostrarFacturas() {
+        LinkedList<Factura> facturas = new LinkedList<>();
         try {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM factura");
             ResultSet resultados = statement.executeQuery();
             while (resultados.next()) {
                 int id = resultados.getInt("idfactura");
-                LocalDate fecha = resultados.getDate("Fecha").toLocalDate();
+                Date fecha = resultados.getDate("Fecha");
                 double total = resultados.getDouble("Total");
                 int clienteId = resultados.getInt("cliente_idcliente");
-                facturas.add(new Factura(id, fecha, total, clienteId));
+                facturas.add(new Factura(id, fecha.toLocalDate(), total, clienteId)); 
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al mostrar facturas: " + e.getMessage());
         }
         return facturas;
+    }
+    public boolean eliminarFactura(int id) {
+        try {
+            PreparedStatement statement = con.prepareStatement("DELETE FROM factura WHERE idfactura = ?");
+            statement.setInt(1, id);
+            int filasAfectadas = statement.executeUpdate();
+            return filasAfectadas > 0; 
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar la factura: " + e.getMessage());
+            return false; 
+        }
     }
 }

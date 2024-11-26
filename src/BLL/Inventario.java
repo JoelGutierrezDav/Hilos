@@ -7,10 +7,15 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import DLL.Conexion;
+import BLL.Producto;
 
 public class Inventario {
     private static Connection con = Conexion.getInstance().getConnection();
+    private LinkedList<Producto> productos;
 
+    public Inventario() {
+        this.productos = new LinkedList<>(); 
+    }
     public LinkedList<Producto> getProductos() {
         LinkedList<Producto> productos = new LinkedList<>();
         try {
@@ -149,5 +154,14 @@ public class Inventario {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al modificar el producto: " + e.getMessage());
         }
+    }
+    public LinkedList<Producto> obtenerProductosBajoStockMinimo() {
+        LinkedList<Producto> productosBajoStock = new LinkedList<>();
+        for (Producto producto : productos) {
+            if (producto.getStock() <= producto.getStockMinimo()) {
+                productosBajoStock.add(producto);
+            }
+        }
+        return productosBajoStock;
     }
 }
